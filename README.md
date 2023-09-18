@@ -1,2 +1,3 @@
-# py-dspinlock
-Distributed Spinlock using Redis
+# Distributed Spinlock using Redis
+
+This is TBD.
