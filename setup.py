@@ -5,20 +5,24 @@ from setuptools import find_packages, setup
 
 # get the current path
 CURRENT_PATH = os.path.dirname(os.path.abspath(__file__))
+# construct the readme path
+README_PATH = os.path.join(os.path.join(CURRENT_PATH, "docs"), "README.md")
+# now construct the requirements path
+REQS_PATH = os.path.join(CURRENT_PATH, "requirements_prod.txt")
 
 # parse the readme into a variable
-with open("docs/README.rst", "r", encoding="utf8") as rmd:
+with open(README_PATH, "r", encoding="utf8") as rmd:
     long_desc = rmd.read()
 
 # fetch the requirements required
-with open(os.path.join(CURRENT_PATH, "requirements_prod.txt"), "r", encoding="utf8") as req_file:
+with open(REQS_PATH, "r", encoding="utf8") as req_file:
     requirements = req_file.read().split("\n")
 
 
 if __name__ == "__main__":
     setup(
         name="py-dspinlock",
-        version="0.0.4",
+        version="0.0.5",
         author="Andreas A. Grammenos",
         author_email="ag926@cl.cam.ac.uk",
         description="A distributed spinlock for Python",

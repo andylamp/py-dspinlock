@@ -17,6 +17,11 @@ jobs:
     # this workload runs only if we do not have the [skip ci] tag
     if: "!contains(github.event.commits[0].message, '[skip ci]')"
 
+    strategy:
+      matrix:
+        # only use 3.10 to speed up checks.
+        python-version: ["3.11"] # , "3.10"
+
     steps:
       - uses: actions/checkout@v3
       - name: Setting up Python version ${{ matrix.python-version }}...
