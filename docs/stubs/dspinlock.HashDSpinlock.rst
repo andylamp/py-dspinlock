@@ -29,5 +29,3 @@ dspinlock.HashDSpinlock
       ~HashDSpinlock.max_block_time
       ~HashDSpinlock.max_spinlock_tries
       ~HashDSpinlock.spinlock_sleep_thresh
-
-

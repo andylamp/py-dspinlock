@@ -29,5 +29,3 @@ dspinlock.DSpinlockBase
       ~DSpinlockBase.max_block_time
       ~DSpinlockBase.max_spinlock_tries
       ~DSpinlockBase.spinlock_sleep_thresh
-
-

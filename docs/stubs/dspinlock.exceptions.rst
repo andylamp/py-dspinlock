@@ -28,5 +28,3 @@ dspinlock.exceptions
       ProvidedObjectIsNotHashable
       RedisNotInitializedException
       SpinlockTriesExceeded
-
-

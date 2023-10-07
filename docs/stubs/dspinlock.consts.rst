@@ -13,17 +13,3 @@ dspinlock.consts
       SL_LOG_FORMAT
       SL_LOG_LEVEL
       SL_LOG_ENABLED
-
-
-
-
-
-
-
-
-
-
-
-
-
-
