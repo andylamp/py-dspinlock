@@ -85,7 +85,7 @@ repos:
     rev: 'v1.5.1'
     hooks:
       - id: mypy
-        args: ["--show-error-codes", "--ignore-missing-imports"]
+        args: ["--show-error-codes", "--ignore-missing-imports", "--check-untyped-defs"]
         additional_dependencies: [ types-requests, types-redis ]
   # use local repository hooks so we can discover libraries.
   - repo: local

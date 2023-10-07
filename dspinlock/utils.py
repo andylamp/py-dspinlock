@@ -1,37 +1,56 @@
 """Module that contains useful utilities."""
+from dataclasses import dataclass
 from typing import Literal
 
 import redis
 
 
-def create_redis_conn(
-    redis_host: str,
-    rdb: int,
-    port: int = 6379,
-    ssl: bool = False,
-    decode_responses: Literal[True, False] = True,
-) -> redis.Redis:
+@dataclass
+class RedisParameters:
+    """The redis connection parameters."""
+
+    redis_host: str = "localhost"
+    """The Redis host that we will connect to, the default is `localhost`."""
+    rdb: int = 0
+    """The Redis database to use, the default is `0`."""
+    port: int = 6379
+    """The Redis port - the default is `6379`."""
+    ssl: bool = False
+    """If we are using SSL with Redis or not - the default is `False`."""
+    socket_connect_timeout: float = 2
+    """The socket connection timeout, in seconds."""
+    decode_responses: bool = True
+    """Flag if we are decoding `redis` engine responses, the default is `False`."""
+
+
+def create_redis_conn(params: RedisParameters | None = None) -> redis.Redis:
     """
     Function that helps connect to the Redis database.
 
     Parameters
     ----------
-    redis_host: str
-        The Redis host that we will connect to.
-    rdb: int
-        The Redis database to use.
-    port: int
-        The Redis port - default 6379.
-    ssl: bool
-        If we are using SSL with Redis or not - default False.
-    decode_responses: Literal[True, False]
-        Checks if we decode responses
+    params: RedisParameters
+        The redis parameters to use.
+
     Returns
     -------
     redis.Redis
         An initialised redis instance, which is also stored as a class variable.
     """
 
+    # if the parameters are `None` then create one with the default values...
+    params = RedisParameters() if params is None else params
+
+    # this is a hack to satisfy mypy when used with a dataclass to pass literals
+    # noinspection PyTypeChecker
+    decode_resp: Literal[True, False] = params.decode_responses
+
+    # try to create the redis connection.
     return redis.Redis(
-        host=redis_host, db=rdb, port=port, ssl=ssl, socket_connect_timeout=2, decode_responses=decode_responses
+        host=params.redis_host,
+        db=params.rdb,
+        port=params.port,
+        ssl=params.ssl,
+        socket_connect_timeout=params.socket_connect_timeout,
+        decode_responses=decode_resp,
     )

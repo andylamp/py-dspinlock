@@ -1,4 +1,4 @@
-"""Exceptions used in the kobodema application."""
+"""Exceptions used within the library."""
 
 
 class InvalidValueEncounteredDuringUnpacking(Exception):
@@ -6,7 +6,7 @@ class InvalidValueEncounteredDuringUnpacking(Exception):
 
 
 class RedisNotInitializedException(Exception):
-    """Raised when redis instance is not initialised properly."""
+    """Raised when `redis` instance is not initialised properly."""
 
 
 class AtomicQueryInvalidStateException(Exception):
@@ -19,3 +19,11 @@ class SpinlockTriesExceeded(Exception):
 
 class InvalidMutexReleaseEncountered(Exception):
     """Raised when we try to release a mutex that is not ours."""
+
+
+class FailIfKeyExistsIsEnabled(Exception):
+    """Raised when we try to acquire a lock when the key already exists and the flag to fail is so is `True`"""
+
+
+class ProvidedObjectIsNotHashable(Exception):
+    """Raised when the object passed does not implement `Hashable`."""

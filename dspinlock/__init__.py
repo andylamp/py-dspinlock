@@ -1,4 +1,4 @@
-"""Module that imports helpers"""
+"""Module that imports helpers."""
 import logging
 import os
 import sys
@@ -8,7 +8,10 @@ from .base import DSpinlockBase
 from .consts import SL_LOG_ENABLED, SL_LOG_FORMAT, SL_LOG_LEVEL, SL_LOG_TAG
 from .exceptions import (
     AtomicQueryInvalidStateException,
+    FailIfKeyExistsIsEnabled,
     InvalidMutexReleaseEncountered,
+    InvalidValueEncounteredDuringUnpacking,
+    ProvidedObjectIsNotHashable,
     RedisNotInitializedException,
     SpinlockTriesExceeded,
 )
@@ -22,8 +25,11 @@ __all__ = [
     "HashDSpinlock",
     "AtomicQueryInvalidStateException",
     "InvalidMutexReleaseEncountered",
-    "SpinlockTriesExceeded",
     "RedisNotInitializedException",
+    "SpinlockTriesExceeded",
+    "InvalidValueEncounteredDuringUnpacking",
+    "FailIfKeyExistsIsEnabled",
+    "ProvidedObjectIsNotHashable",
 ]
 
 # enable logging, if we have the env flag up we report in stdout, otherwise
