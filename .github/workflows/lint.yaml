@@ -1,9 +1,15 @@
 # a more complete example of the linters which includes testing.
 name: lint
 
-on: [push, pull_request]
+on:
+  push:
+    branches-ignore:
+      - release
+  pull_request:
+    branches-ignore:
+      - release
 
-# the defined jobs
+      # the defined jobs
 jobs:
   # the job build configuration and steps
   build:

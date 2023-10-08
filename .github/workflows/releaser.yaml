@@ -40,7 +40,7 @@ jobs:
       # Fail if the tag exists
       - name: Fail if tag exists
         run: >-
-          [ "${{ steps.checkTag.outputs.exists }}" == "true" ] && exit 1
+          [ "${{ steps.checkTag.outputs.exists }}" = "true" ] || { exit 1; } && echo "Version does not exist"
       # set up the python environment for releasing
       - name: Set up Python
         uses: actions/setup-python@v4
