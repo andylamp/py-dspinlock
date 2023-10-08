@@ -6,7 +6,7 @@ from setuptools import find_packages, setup
 # get the current path
 CURRENT_PATH = os.path.dirname(os.path.abspath(__file__))
 # construct the readme path
-README_PATH = os.path.join(os.path.join(CURRENT_PATH, "docs"), "README.md")
+README_PATH = os.path.join(CURRENT_PATH, "docs/README.md")
 # now construct the requirements path
 REQS_PATH = os.path.join(CURRENT_PATH, "requirements_prod.txt")
 
