@@ -15,8 +15,31 @@ jobs:
       id-token: write
 
     steps:
-      # checkout the codebase at the target release
-      - uses: actions/checkout@v4
+      # Checkout the codebase at the target release
+      - name: Checkout the codebase
+        uses: actions/checkout@v4
+      # Extract the current version of the release
+      - name: Extract release version, if found, and assign
+        run: |
+          app_version=""
+          if grep -q VERSION setup.py; then
+            app_version=$(grep VERSION setup.py | grep -oP "[\d.]+")
+          fi
+          echo "Discovered version: ${app_version}"
+          github_sha="${{ github.sha }}"
+          version_tag="v${app_version}-${github_sha::7}"
+          # update the environment variables
+          echo "version_tag=${version_tag}" >> ${GITHUB_ENV}
+      # Check if the release tag already exists
+      - name: Check if the release tag already exists
+        uses: mukunku/tag-exists-action@v1.4.0
+        id: checkTag
+        with:
+          tag: ${{ env.version_tag }}
+      # Fail if the tag exists
+      - name: Fail if tag exists
+        run: >-
+          [ "${{ steps.checkTag.outputs.exists }}" == "true" ] && exit 1
       # set up the python environment for releasing
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -42,4 +65,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: >-
-          gh release upload '${{ github.ref_name }}' dist/** --repo '${{ github.repository }}'
+          gh release upload '${{ env.version_tag }}' dist/** --repo '${{ github.repository }}'
