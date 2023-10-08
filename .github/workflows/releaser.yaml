@@ -1,0 +1,45 @@
+name: Publish release to PyPi
+
+on:
+  push:
+    branches:
+      - release
+
+jobs:
+  build:
+    name: Build distribution packages
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      id-token: write
+
+    steps:
+      # checkout the codebase at the target release
+      - uses: actions/checkout@v4
+      # set up the python environment for releasing
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+      # Install the pypa/build package, which allows us to actually build the packages
+      - name: Install PyPa Build
+        run: >-
+          python3 -m pip install build --user
+      # Build the packages
+      - name: Build the binary wheels and a source tarball
+        run: >-
+          python3 -m build
+      # Sign the dists with sigstore
+      - name: Sign the distributions with Sigstore
+        uses: sigstore/gh-action-sigstore-python@v2.1.0
+        with:
+          inputs: >-
+            ./dist/*.tar.gz
+            ./dist/*.whl
+      # Upload artifact signatures to GitHub Release
+      - name: Upload artifact signatures to GitHub Releases
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: >-
+          gh release upload '${{ github.ref_name }}' dist/** --repo '${{ github.repository }}'
