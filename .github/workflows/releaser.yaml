@@ -24,10 +24,11 @@ jobs:
           app_version=""
           if grep -q VERSION setup.py; then
             app_version=$(grep VERSION setup.py | grep -oP "[\d.]+")
+          else
+            exit 1
           fi
           echo "Discovered version: ${app_version}"
-          github_sha="${{ github.sha }}"
-          version_tag="v${app_version}-${github_sha::7}"
+          version_tag="v${app_version}"
           # update the environment variables
           echo "version_tag=${version_tag}" >> ${GITHUB_ENV}
       # Check if the release tag already exists
