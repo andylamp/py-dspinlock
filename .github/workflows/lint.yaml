@@ -1,4 +1,4 @@
-# a more complete example of the linters which includes testing.
+# Workflow that lints, tests, and creates coverage badge.
 name: lint
 
 on:
@@ -9,63 +9,67 @@ on:
     branches-ignore:
       - release
 
-      # the defined jobs
+# The defined jobs
 jobs:
-  # the job build configuration and steps
+  # The job build configuration and steps
   build:
-    # we use ubuntu latest for this, which normally is the most recent LTS version
+    # We use ubuntu latest for this, which normally is the most recent LTS version
     runs-on: ubuntu-latest
     env:
-      # coverage related variables
+      # Coverage related variables
       min-python: "3.11"
       coverage-badge-filename: coverage.svg
 
-    # this workload runs only if we do not have the [skip ci] tag
+    # This workload runs only if we do not have the [skip ci] tag
     if: "!contains(github.event.commits[0].message, '[skip ci]')"
 
     strategy:
       matrix:
-        # only use 3.10 to speed up checks.
-        python-version: ["3.11"] # , "3.10"
+        # matrix with versions to test against: 3.10, 3.11.
+        python-version: ["3.10", "3.11"]
 
     steps:
-      - uses: actions/checkout@v4
+      # Checkout the codebase.
+      - name: Checkout the codebase
+        uses: actions/checkout@v4
+      # Set up the python versions to test against.
       - name: Setting up Python version ${{ matrix.python-version }}...
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
           architecture: "x64"
+      # Install the dependencies.
       - name: Installing dependencies...
-        # install the dependencies along with a set of required packages; if requirements is present
+        # Install the dependencies along with a set of required packages; if requirements is present
         # then, we install that as well.
         run: |
           python -m pip install -U pip
           if [ -f requirements.txt ]; then pip install -r ./requirements.txt; fi
           sudo snap install shfmt
-      # redis section
+      # Redis section.
       - name: Create the redis instance
         uses: supercharge/redis-github-action@1.7.0
         with:
           redis-version: 6
-      # Python linting phase
+      # Python linting phase.
       - name: Running pre-commit hooks...
         uses: pre-commit/action@v3.0.0
-      # Shell linting phase
+      # Shell linting phase.
       - name: Running shell check...
         uses: ludeeus/action-shellcheck@master
-      # perform testing with pytest while generating coverage data
+      # perform testing with pytest while generating coverage data.
       - name: Perform testing with pytest including coverage
         run: |
           coverage run -m pytest &&\
           coverage-badge -f -o ${{ env.coverage-badge-filename }} && coverage report
-      # verify that the coverage file changed
+      # Verify that the coverage file changed.
       - name: Verify Changed files
         if: ${{ matrix.python-version == env.min-python }}
         uses: tj-actions/verify-changed-files@v12
         id: changed_files
         with:
           files: ${{ env.coverage-badge-filename }}
-      # commit and push changes using the `gh` cli API because it allows us to produce verified commits.
+      # Commit and push changes using the `gh` cli API because it allows us to produce verified commits.
       - name: Commit & Push changes
         env:
           GITHUB_TOKEN: ${{ secrets.github_token }}

@@ -45,7 +45,7 @@ jobs:
           else
             echo "Version does not exist - we can continue"
           fi
-      # set up the python environment for releasing
+      # Set up the python environment for releasing
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
