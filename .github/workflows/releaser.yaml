@@ -39,8 +39,8 @@ jobs:
           tag: ${{ env.version_tag }}
       # Fail if the tag exists
       - name: Fail if tag exists
-        run: >-
-          [ "${{ steps.checkTag.outputs.exists }}" = "true" ] || { exit 1; } && echo "Version does not exist"
+        run: |
+          [ "${{ steps.checkTag.outputs.exists }}" = "true" ] || { echo "Version does not exist - we can continue"; } && exit 1
       # set up the python environment for releasing
       - name: Set up Python
         uses: actions/setup-python@v4
