@@ -70,4 +70,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: >-
-          gh release upload '${{ env.version_tag }}' dist/** --repo '${{ github.repository }}'
+          gh release create '${{ env.version_tag }}' dist/** --generate-notes --repo '${{ github.repository }}'
