@@ -51,7 +51,7 @@ jobs:
       # perform testing with pytest while generating coverage data
       - name: Perform testing with pytest including coverage
         run: |
-          coverage run -m pytest --log-cli-level=DEBUG &&\
+          coverage run -m pytest &&\
           coverage-badge -f -o ${{ env.coverage-badge-filename }} && coverage report
       # verify that the coverage file changed
       - name: Verify Changed files

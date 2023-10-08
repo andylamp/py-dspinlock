@@ -1,5 +1,6 @@
 """Test the atomic isolated functionality."""
 import asyncio
+import logging
 from typing import Callable
 
 import pytest
@@ -44,7 +45,8 @@ def test_distributed_spinlock_mutex_return_immediately_if_computed(
     key = f"dspinlock,{hash(the_obj)}"
     # clear the messages from previous runs.
     caplog.clear()
-    asyncio.run(spawner_factory(the_obj, cached_if_computed=True))
+    with caplog.at_level(logging.DEBUG):
+        asyncio.run(spawner_factory(the_obj, cached_if_computed=True))
     # now delete it
     redis_session.delete(key)
     # ensure that the value only changed once.
