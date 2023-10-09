@@ -1,7 +1,6 @@
 """Module that imports helpers."""
 import logging
 import os
-import sys
 from typing import TypeAlias
 
 from .base import DSpinlockBase
@@ -36,7 +35,7 @@ __all__ = [
 # we use `NullHandler`.
 handler: HandlerType
 if SL_LOG_ENABLED in os.environ:
-    handler = logging.StreamHandler(sys.stdout)
+    handler = logging.StreamHandler()
 else:
     handler = logging.NullHandler()
 
