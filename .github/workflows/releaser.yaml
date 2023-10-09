@@ -73,6 +73,10 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         run: >-
           gh release create '${{ env.version_tag }}' dist/** --generate-notes --repo '${{ github.repository }}'
+      # Delete signatures after releasing, so we can upload the files to PyPi
+      - name: Delete signatures so we can upload to PyPi
+        run: >-
+          rm dists/*.sigstore
       # After everything, we can now publish to PyPi.
       - name: Publish package to PyPi
         env:
