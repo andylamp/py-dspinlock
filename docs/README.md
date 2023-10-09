@@ -1,6 +1,6 @@
 # Distributed Spinlock
 
-![linters](https://github.com/andylamp/py-dspinlock/workflows/lint/badge.svg)
+![linters](https://github.com/andylamp/py-dspinlock/actions/workflows/lint.yml/badge.svg)
 ![coverage](../coverage.svg)
 
 ## Introduction
