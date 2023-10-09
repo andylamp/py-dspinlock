@@ -3,7 +3,7 @@ import os
 
 from setuptools import find_packages, setup
 
-VERSION: str = "0.0.15"
+VERSION: str = "0.0.16"
 
 # get the current path
 CURRENT_PATH = os.path.dirname(os.path.abspath(__file__))
@@ -40,7 +40,7 @@ if __name__ == "__main__":
             "Programming Language :: Python :: 3.12",
             "License :: OSI Approved :: Apache Software License",
         ],
-        license="MIT",
+        license="Apache Software License 2.0",
         license_files=("LICENSE",),
         python_requires=">=3.10",
         include_package_data=True,
