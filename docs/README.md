@@ -1,5 +1,7 @@
 # Distributed Spinlock
 
+![PyPi](https://img.shields.io/pypi/v/py-dspinlock?style=flat-square)
+![Supported Python versions](https://img.shields.io/pypi/pyversions/py-dspinlock?style=flat-square)
 ![linters](https://github.com/andylamp/py-dspinlock/actions/workflows/lint.yml/badge.svg)
 ![coverage](../coverage.svg)
 
