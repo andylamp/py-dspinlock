@@ -9,6 +9,9 @@ This a simple, yet flexible implementation of a distributed spinlock mutex. This
 stateless distributed services that are in contention for the same resource. For example, this can be reflected
 when you want to avoid duplicate computations while a query is already executing.
 
+*Note: the documentation in `readthedocs` is always generated against the latest released version, thus there might
+be differences if you are using the checkout from `main` avenue to install.*
+
 ## Preliminaries
 
 The implementation is based on `redis` and practically is the only required dependency in order to successfully
