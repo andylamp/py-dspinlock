@@ -19,6 +19,7 @@ Welcome to py-dspinlock's documentation!
    dspinlock.HashDSpinlock
    dspinlock.consts
    dspinlock.exceptions
+   dspinlock.utils
 
 Indices and tables
 ==================

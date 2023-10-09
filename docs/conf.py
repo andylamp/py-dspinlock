@@ -32,6 +32,7 @@ extensions = [
     "sphinx.ext.viewcode",
     "sphinx.ext.coverage",
     "sphinx.ext.autosummary",
+    "sphinx.ext.linkcode",
 ]
 
 templates_path = ["_templates"]
@@ -50,7 +51,18 @@ html_static_path = ["_static"]
 
 # to override alphabetical order for autodoc modules
 autodoc_member_order = "bysource"
-
+autodoc_typehints = "description"
 autodoc_default_flags = ["members"]
 
 autosummary_generate = True
+
+
+def linkcode_resolve(domain, info):
+    """Resolves the GitHub project links."""
+    if domain != "py":
+        return None
+    if not info["module"]:
+        return None
+    filename = info["module"].replace(".", "/")
+
+    return "https://github.com/andylamp/py-dspinlock/tree/main/%s.py" % filename

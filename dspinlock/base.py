@@ -60,7 +60,7 @@ class DSpinlockBase(ABC):
     spinlock_sleep_thresh: float = 0.5
     """The spinlock sleep threshold, by default 0.5 seconds."""
     expire_at_timedelta: timedelta = timedelta(hours=1)
-    """The expire at timedelta value, by default 1 hour."""
+    """The `expire_at` timedelta value, by default 1 hour."""
     _key_sep: str = ","
     """The tag separator."""
     _value_sep: str = ","
