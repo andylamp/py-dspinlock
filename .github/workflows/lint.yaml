@@ -15,6 +15,9 @@ jobs:
   build:
     # We use ubuntu latest for this, which normally is the most recent LTS version
     runs-on: ubuntu-latest
+    # add permission so that the commit can be made
+    permissions: write-all
+
     env:
       # Coverage related variables
       min-python: "3.11"
