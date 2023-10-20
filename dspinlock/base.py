@@ -423,6 +423,8 @@ class DSpinlockBase(ABC):
             The key for the entry.
         tries: int
             The current spinlock tries.
+        is_release: bool
+            Checks if the break was initialised by a release operation.
 
         Returns
         -------

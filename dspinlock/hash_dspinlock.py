@@ -9,7 +9,7 @@ from .exceptions import InvalidValueEncounteredDuringUnpacking
 
 # pylint: disable=too-few-public-methods
 class HashDSpinlock(DSpinlockBase):
-    """A Hash based Distributed Spinlock, which works on any object that implements `Hashable`."""
+    """A Hash-based Distributed Spinlock, which works on any object that implements `Hashable`."""
 
     def get_key(self) -> str:
         """
@@ -19,13 +19,13 @@ class HashDSpinlock(DSpinlockBase):
 
         Where the following values normally hold - unless overriden,
 
-        - `_key_prefix`: `dspinlock`
-        - `_obj_hash`: the result of using the `hash` function with the object instance - _i.e._: `hash(obj)`
+            - `_key_prefix`: `dspinlock`
+            - `_obj_hash`: the result of using the `hash` function with the object instance - _i.e._: `hash(obj)`
 
-        By default, each segment of the key is seperated by a comma - though internally this can be configured by
+        By default, each segment of the key is separated by a comma - though internally this can be configured by
         adjusting the `_key_sep` variable.
 
-        Note, that the `_key_prefix` value can also be adjusted, but as mentioned above the default is: `dspinlock`.
+        Note that the `_key_prefix` value can also be adjusted, but as mentioned above, the default is: `dspinlock`.
 
         Returns
         -------
@@ -40,12 +40,12 @@ class HashDSpinlock(DSpinlockBase):
         should be instance dependent and unique across instances.
 
         For this implementation, the tag is set to be equal to the following - in that order - each value being
-        seperated by comma,
+         separated by a comma,
 
             - a UUID4 to be the random identifier for this object.
             - the timestamp of creation,
 
-        The above combination has very low probability - but not zero - to clash with another instance.
+        The above combination has a very low probability - but not zero - to clash with another instance.
 
         Parameters
         ----------
@@ -58,13 +58,13 @@ class HashDSpinlock(DSpinlockBase):
         """
         Unpacks the value from `redis`. This is class specific as it depends on how your tag is formatted.
 
-        For this implementation the stored value has the following format,
+        For this implementation, the stored value has the following format -
 
-            - uuid4: the instance uuid4,
-            - datetime ts: the datetime timestamp,
+            - `uuid4`: the instance uuid4,
+            - `datetime` ts: the datetime timestamp,
             - mutex value: the mutex current value
 
-        By default, each segment of the value is seperated by a comma - though internally this can be configured by
+        By default, each segment of the value is separated by a comma - though internally this can be configured by
         adjusting the `_value_sep` variable.
 
         Parameters
