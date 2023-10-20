@@ -11,15 +11,7 @@ Welcome to py-dspinlock's documentation!
    :caption: Contents:
 
    README
-
-.. autosummary::
-   :toctree: stubs
-
-   dspinlock.DSpinlockBase
-   dspinlock.HashDSpinlock
-   dspinlock.consts
-   dspinlock.exceptions
-   dspinlock.utils
+   modules
 
 Indices and tables
 ==================

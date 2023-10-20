@@ -32,7 +32,7 @@ class HashDSpinlock(DSpinlockBase):
         str
             The entry key.
         """
-        return f"{self._key_prefix}{self._key_sep}{self._obj_hash}"
+        return f"{self._key_prefix}{self._key_sep}{self._obj_uid}"
 
     def _set_tag(self, obj: Hashable | None = None):
         """

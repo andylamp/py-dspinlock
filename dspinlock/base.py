@@ -92,7 +92,7 @@ class DSpinlockBase(ABC):
         sess: redis.Redis | None = None
             The session to redis, which can be `None`.
         redis_params: RedisParameters | None = None
-            If the `sess` above is `None`, then if this flag is raised we create the connection using sample params.
+            If the `sess` above is `None` then if this flag is raised, we create the connection using sample params.
         fail_if_key_exists: bool = False
             Indicates if we fail should the key already exists - i.e. in cases when we want to block computation for
             a certain period.
@@ -100,7 +100,7 @@ class DSpinlockBase(ABC):
             Indicates if the result is computed can be returned from a cache. Thus, we do not have to wait for its
             computation; hence, we can return immediately _without_ practically getting the lock.
         """
-        self._obj_hash = self._get_uid(obj)
+        self._obj_uid = self._get_uid(obj)
         self._auto_create = redis_params
         self._sess = self._get_redis_sess(sess, redis_params)
         self._tag = self._set_tag()
@@ -118,7 +118,7 @@ class DSpinlockBase(ABC):
     @staticmethod
     def _get_uid(obj: Any) -> str:
         """
-        Used to check if the object can be hashed, if not an exception is raised.
+        Used to check if the object can be hashed, if not, an exception is raised.
 
         Note: In case you want to implement your own `hash` method - you're free to do so either at the object level
         or by overriding this method when you are subclassing.
@@ -297,12 +297,16 @@ class DSpinlockBase(ABC):
         Parameters
         ----------
         pipe: redis.client.Pipeline
+            The ``redis`` pipeline to use.
         key: str
+            The key for the mutex.
         force_unblock: bool
+            Flag indicating if we can grab te mutex regardless.
 
         Raises
         --------
         redis.exceptions.WatchError
+            Raises when the target key has its value changed - this happens by default in this function.
         """
         qlog.debug("Blocking key with tag: '%s', blocking was forced: '%s'", self._tag, force_unblock)
         pipe.set(key, self._generate_payload(QueryState.BLOCKED), exat=self._get_expiry_unix_time())

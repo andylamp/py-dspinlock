@@ -7,17 +7,19 @@
 
 ## Introduction
 
-This a simple, yet flexible implementation of a distributed spinlock mutex. This can be useful when you have many
-stateless distributed services that are in contention for the same resource. For example, this can be reflected
-when you want to avoid duplicate computations while a query is already executing.
+This is a simple, yet flexible implementation of a distributed spinlock mutex. A mutex is a way to lock a resource
+under contention, for more information about mutexes you can read [here][3]. In particular, a [Spinlock][4] is a type
+of mutex that blocks the waiting thread and continuously polls the target mutex to see when it can be acquired. This
+can be useful when you have many stateless distributed services that are in contention for the same resource. For
+example, this can be reflected when you want to avoid duplicate computations while a query is already being executed.
 
-*Note: the documentation in `readthedocs` is always generated against the latest released version, thus there might
+*Note: the documentation in `readthedocs` is always generated against the latest published version, thus there might
 be differences if you are using the checkout from `main` avenue to install.*
 
 ## Preliminaries
 
-The implementation is based on `redis` and practically is the only required dependency in order to successfully
-install the library. For more configuration options and usage directions please read on.
+The implementation is based on `redis` and practically is the only required dependency to successfully install the
+library. For more configuration options and usage directions, please read on.
 
 ## Installation
 
@@ -142,7 +144,7 @@ The library uses a custom logger in order to provide diagnostic information. To 
 Firstly you need to set the environment variable - using any value - with the key: `SL_LOG_ENABLED`. After, you have
 to set your basic logger to accept at least `DEBUG` level messages, as all diagnostic ones are set to that level.
 
-The code snippet that perform that is shown below,
+The code snippet that accomplishes that is shown below,
 
 ```python
 import logging
@@ -155,9 +157,11 @@ logging.basicConfig(level=SL_LOG_LEVEL)
 
 if __name__ == "__main__":
     # now you see some debug messages in the default format of the library.
-    with HashDSpinlock("asdf"):
+    with HashDSpinlock("example"):
         print("executed task_id: 1")
 ```
 
 [1]: https://docs.python.org/3/library/collections.abc.html?highlight=hashable#collections.abc.Hashable
 [2]: https://github.com/andylamp/py-dspinlock/blob/main/dspinlock/utils.py
+[3]: https://en.wikipedia.org/wiki/Lock_(computer_science)
+[4]: https://en.wikipedia.org/wiki/Spinlock
