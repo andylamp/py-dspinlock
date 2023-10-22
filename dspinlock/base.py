@@ -103,7 +103,7 @@ class DSpinlockBase(ABC):
         self._obj_uid = self._get_uid(obj)
         self._auto_create = redis_params
         self._sess = self._get_redis_sess(sess, redis_params)
-        self._tag = self._set_tag()
+        self._tag = self._get_tag()
         self._fail_if_key_exists = fail_if_key_exists
         self._cached_if_computed = cached_if_computed
 
@@ -144,7 +144,7 @@ class DSpinlockBase(ABC):
         raise ProvidedObjectIsNotHashable(f"Provided object with type: {type(obj)} does not implement `Hashable`.")
 
     @abstractmethod
-    def _set_tag(self, obj: Any | None = None):
+    def _get_tag(self, obj: Any | None = None):
         """
         Takes the object and produces a tag based on the desired attributes to take in account.
 
@@ -152,10 +152,6 @@ class DSpinlockBase(ABC):
         ----------
         obj: Any | None = None
             The object instance to set the tag for, if required - by default it is `None`.
-
-        Returns
-        -------
-
         """
         raise NotImplementedError
 
@@ -288,7 +284,7 @@ class DSpinlockBase(ABC):
         str
             The payload value.
         """
-        return f"{self._tag},{val.value}"
+        return f"{self._tag}{self._value_sep}{val.value}"
 
     def _block_key(self, pipe: redis.client.Pipeline, key: str, force_unblock: bool):
         """

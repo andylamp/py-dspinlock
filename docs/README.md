@@ -138,6 +138,19 @@ if __name__ == "__main__":
         print("executed task_id: 1")
 ```
 
+#### Advanced customisation
+
+The library provides the primitives so that you can create your own subclasses based on either `HashDSpinlock` or the
+baseclass itself. To so do, you can override these functions,
+
+- `_get_uid`: returns the unique identifier for the instance, by default it is the `hash` of the object,
+- `_get_tag`: the tag of the instance which is used to "tag" the actual mutex value,
+- _`unpack_value`: defines the way we unpack the value retrieved from `redis`,
+- `get_key`: returns the key that should be uniquely identifying each entry.
+
+You do not have to override all of them, but for more details you can see how the `HashDSpinlock` itself is
+implemented.
+
 ### Enable logging
 
 The library uses a custom logger in order to provide diagnostic information. To enable the logger, to do two things.
