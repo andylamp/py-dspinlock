@@ -5,6 +5,7 @@ from collections.abc import Hashable
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 from enum import Enum
+from hashlib import sha256
 from math import ceil
 from time import sleep
 from typing import Any
@@ -115,6 +116,7 @@ class DSpinlockBase(ABC):
     def __exit__(self, exc_type, exc_val, exc_tb):
         self._release()
 
+    # noinspection InsecureHash
     @staticmethod
     def _get_uid(obj: Any) -> str:
         """
@@ -122,6 +124,9 @@ class DSpinlockBase(ABC):
 
         Note: In case you want to implement your own `hash` method - you're free to do so either at the object level
         or by overriding this method when you are subclassing.
+
+        `Important note: because Python 3 does not support stable hashing for ``str``, ``bytes``, and ``datetime`` we
+        use hashing method from ``hashlib`` that can produce such cases for these cases.`
 
         Parameters
         ----------
@@ -138,9 +143,14 @@ class DSpinlockBase(ABC):
         ProvidedObjectIsNotHashable
             Raised when the object provided does not implement `Hashable`.
         """
+        if isinstance(obj, str):
+            return sha256(str.encode(obj), usedforsecurity=False).hexdigest()
+        if isinstance(obj, bytes):
+            return sha256(obj, usedforsecurity=False).hexdigest()
+        if isinstance(obj, datetime):
+            return sha256(str.encode(obj.isoformat()), usedforsecurity=False).hexdigest()
         if isinstance(obj, Hashable):
             return f"{hash(obj)}"
-
         raise ProvidedObjectIsNotHashable(f"Provided object with type: {type(obj)} does not implement `Hashable`.")
 
     @abstractmethod

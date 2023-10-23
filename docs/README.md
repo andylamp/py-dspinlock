@@ -151,6 +151,9 @@ baseclass itself. To so do, you can override these functions,
 You do not have to override all of them, but for more details you can see how the `HashDSpinlock` itself is
 implemented.
 
+*Note: Python 3 does not support stable hashing for `str`, `bytes`, and `datetime`. In these instances, we use a stable
+hashing algorithm from `hashlib`, namely `sha256` based digests.*
+
 ### Enable logging
 
 The library uses a custom logger in order to provide diagnostic information. To enable the logger, to do two things.

@@ -96,3 +96,22 @@ async def spawner_factory() -> Callable:
         )
 
     return _spawner
+
+
+@pytest.fixture
+def keygen() -> Callable:
+    """
+    Generates the key for the object for the default `HashDSpinlock` class.
+
+    Returns
+    -------
+    Callable
+        The keygen function to use.
+    """
+
+    # noinspection PyProtectedMember
+    def the_keygen(obj: str) -> str:
+        # pylint: disable=protected-access
+        return f"dspinlock,{HashDSpinlock._get_uid(obj)}"
+
+    return the_keygen
