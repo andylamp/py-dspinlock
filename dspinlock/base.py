@@ -236,49 +236,42 @@ class DSpinlockBase(ABC):
         """Releases the distributed query mutex."""
         key = self.get_key()
 
-        tries = 1
-        res = None
+        try:
+            pipe = self._get_redis_sess().pipeline(transaction=True)
+            pipe.watch(key)
 
-        for _ in enumerate(range(self.max_spinlock_tries)):
-            try:
-                pipe = self._get_redis_sess().pipeline()
-                pipe.watch(key)
+            res = self._unpack_value(self._get_redis_sess().get(key))
 
-                res = self._unpack_value(self._get_redis_sess().get(key))
+            if res is None:
+                qlog.debug("Cannot release mutex for key: %s as the key was not existent...", self.get_key())
+                raise InvalidMutexReleaseEncountered(
+                    "Encountered release request before mutex acquisition, this should not happen."
+                )
 
-                if res is None:
-                    qlog.debug("Cannot release mutex for key: %s as the key was not existent...", self.get_key())
-                    return
+            if self._mutex_value_match(res, QueryState.BLOCKED):
+                if res.tag != self._tag:
+                    raise InvalidMutexReleaseEncountered(
+                        f"Encountered a blocked query mutex with tag: {res.tag} that is for "
+                        "another query, this should not happen."
+                    )
+                payload = self._generate_payload(QueryState.COMPUTED)
+                qlog.debug("Changing the query mutex for key: '%s' to value: '%s'", self.get_key(), payload)
+                pipe.set(key, payload, exat=self._get_expiry_unix_time())
+                pipe.execute()
+                return
 
-                if self._mutex_value_match(res, QueryState.BLOCKED):
-                    if res.tag != self._tag:
-                        raise InvalidMutexReleaseEncountered(
-                            f"Encountered a blocked query mutex with tag: {res.tag} that is for "
-                            "another query, this should not happen."
-                        )
-                    payload = self._generate_payload(QueryState.COMPUTED)
-                    qlog.debug("Changing the query mutex for key: '%s' to value: '%s'", self.get_key(), payload)
-                    pipe.set(key, payload, exat=self._get_expiry_unix_time())
-                    pipe.execute()
-                    break
+            if self._mutex_value_match(res, QueryState.COMPUTED):
+                qlog.debug("Query mutex required no release as its already computed with tag: '%s'.", res.tag)
+                return
 
-                if self._mutex_value_match(res, QueryState.COMPUTED):
-                    qlog.debug("Query mutex required no release as its already computed with tag: '%s'.", res.tag)
-                    break
+            raise InvalidMutexReleaseEncountered("Got an unknown value at release...!")
 
-                raise InvalidMutexReleaseEncountered("Got an unknown value at release...!")
-
-            except redis.exceptions.WatchError:
-                if self._can_break(key, tries, is_release=True):
-                    break
-
-            # sleep a bit.
-            sleep(self.spinlock_sleep_thresh)
-
-        if tries > self.max_spinlock_tries:
-            msg = f"Spinlock tries exceeded during release of request with tag: {res.tag if res else 'UNKNOWN'}."
-            qlog.error(msg)
-            raise SpinlockTriesExceeded(msg)
+        except redis.exceptions.WatchError:
+            if not self._can_break(key, tries=1, is_release=True):
+                raise InvalidMutexReleaseEncountered(
+                    "Mutex could not be broken during release when it was acquired - this should not happen, "
+                    "as only one instance can have the mutex lock at any given time."
+                ) from redis.exceptions.WatchError
 
     def _generate_payload(self, val: QueryState) -> str:
         """
@@ -337,7 +330,7 @@ class DSpinlockBase(ABC):
 
         for _ in enumerate(range(self.max_spinlock_tries)):
             try:
-                pipe: redis.client.Pipeline = self._get_redis_sess().pipeline()
+                pipe: redis.client.Pipeline = self._get_redis_sess().pipeline(transaction=True)
                 pipe.watch(key)
 
                 # now, check if the key exists and the fail flag if this event happens is raised.
