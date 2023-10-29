@@ -3,6 +3,7 @@ import os
 
 from setuptools import find_packages, setup
 
+# the version of the package for easier extraction
 VERSION: str = "0.2.6"
 
 # get the current path
