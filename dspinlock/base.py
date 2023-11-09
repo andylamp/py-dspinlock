@@ -428,7 +428,7 @@ class DSpinlockBase(ABC):
         Returns
         -------
         bool
-            Returns True if we are able to break, otherwise False.
+            Returns `True` if we are able to break, otherwise `False`.
         """
         res = self._unpack_value(self._get_redis_sess().get(key))
         mutex_stage = "release" if is_release else "acquisition"
