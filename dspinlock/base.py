@@ -437,13 +437,16 @@ class DSpinlockBase(ABC):
                 f"Cannot have a null key at break check during {mutex_stage}, for key: {self.get_key()}"
             )
 
-        if self._tag_match(res) and self._mutex_value_match(res, QueryState.BLOCKED):
-            qlog.debug(
-                "Query mutex value changed during its %s, but it was from us as tags match, tag: %s",
-                mutex_stage,
-                self._tag,
-            )
-            return True
+        if self._tag_match(res):
+            if (is_release and self._mutex_value_match(res, QueryState.COMPUTED)) or (
+                not is_release and self._mutex_value_match(res, QueryState.BLOCKED)
+            ):
+                qlog.debug(
+                    "Query mutex value changed during its %s, but it was from us as tags match, tag: %s",
+                    mutex_stage,
+                    self._tag,
+                )
+                return True
 
         qlog.debug(
             "Query mutex value changed during its %s, attempting to get the mutex until spinlock tries is exhausted "
@@ -490,25 +493,34 @@ class DSpinlockBase(ABC):
         """
         Fetch or create a redis session based on the current parameters.
 
+        Note: As a general guideline `redis` should be initialised at instance creation.
+
         Returns
         -------
         redis.Redis
             The redis instance to use.
         """
-        # by default, return the instance we have, if initialised.
-        # Redis should be initialised at instance creation.
-        if sess is not None:
-            self._sess = sess
+        qlog.debug("Getting redis session with sess: %s and params: %s", sess, redis_params)
 
         # check if both parameters have values
         if redis_params and sess:
             raise AttributeError("Providing both a redis instance and parameters to create it is not supported")
 
-        # create the redis session
-        self._sess = sess if sess else create_redis_conn(redis_params)
+        # If we provide a session to use, override the existing one even if we have it.
+        if sess is not None:
+            self._sess = sess
+
+        # check if we already have an instance and return it - either if we already assigned or it exists already.
+        if self._sess:
+            return self._sess
+
+        # if we reached here, then sess is `None`, thus create connection using the parameters provided (if any)
+        self._sess = create_redis_conn(redis_params)
+
         # if after creation it is still `None`, raise an exception.
         if self._sess is None:
             raise AttributeError("No redis session was provided, cannot continue.")
 
-        # else return it.
+        qlog.debug("Returning newly created redis session: %s", self._sess)
+        # finally, return the created connection
         return self._sess

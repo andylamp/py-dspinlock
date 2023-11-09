@@ -4,7 +4,7 @@ import os
 from setuptools import find_packages, setup
 
 # the version of the package for easier extraction
-VERSION: str = "0.2.6"
+VERSION: str = "0.2.7"
 
 # get the current path
 CURRENT_PATH = os.path.dirname(os.path.abspath(__file__))
