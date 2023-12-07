@@ -31,7 +31,7 @@ pip install py-dspilock
 ```
 
 Any requirements will be installed automatically, but the minimum required version of `redis` client is set to
-be `5.0.0`.
+be `4.0.0`.
 
 ## Usage
 
