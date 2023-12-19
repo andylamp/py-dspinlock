@@ -85,9 +85,16 @@ class HashDSpinlock(DSpinlockBase):
             return unpacked_val
 
         # handle case where we get byte strings
-        tokens = (
-            value.decode("utf-8").split(self._value_sep) if isinstance(value, bytes) else value.split(self._value_sep)
-        )
+        try:
+            tokens = (
+                value.decode("utf-8").split(self._value_sep)
+                if isinstance(value, bytes)
+                else value.split(self._value_sep)
+            )
+        except UnicodeDecodeError as unicode_exc:
+            raise InvalidValueEncounteredDuringUnpacking(
+                "Attempted to unpack a value which was not encoded correctly"
+            ) from unicode_exc
 
         tok_num = len(tokens)
 
