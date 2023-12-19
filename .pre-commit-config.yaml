@@ -50,7 +50,7 @@ repos:
         args: [ -i 2 ]
   # ensure code is black compliant
   - repo: https://github.com/psf/black
-    rev: '23.11.0'
+    rev: '23.12.0'
     hooks:
       - id: black
   # statically populates the `known_third_party` config of `isort`
@@ -60,7 +60,7 @@ repos:
       - id: seed-isort-config
   # fetch the isort package
   - repo: https://github.com/PyCQA/isort
-    rev: '5.12.0'
+    rev: '5.13.2'
     hooks:
       - id: isort
   # add autoflakes
@@ -82,7 +82,7 @@ repos:
         args: [--exclude ./venv]
   # add mypy
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: 'v1.6.1'
+    rev: 'v1.7.1'
     hooks:
       - id: mypy
         args: ["--show-error-codes", "--ignore-missing-imports", "--check-untyped-defs"]
