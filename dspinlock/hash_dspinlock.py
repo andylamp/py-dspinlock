@@ -54,7 +54,7 @@ class HashDSpinlock(DSpinlockBase):
         """
         return f"{uuid4()}{self._value_sep}{datetime.now(tz=timezone.utc).isoformat()}"
 
-    def _unpack_value(self, value: str | None) -> UnpackedValue | None:
+    def _unpack_value(self, value: bytes | str | None) -> UnpackedValue | None:
         """
         Unpacks the value from `redis`. This is class specific as it depends on how your tag is formatted.
 
@@ -69,7 +69,7 @@ class HashDSpinlock(DSpinlockBase):
 
         Parameters
         ----------
-        value: str | None
+        value: bytes | str | None
             The value as fetched from redis.
 
         Returns
