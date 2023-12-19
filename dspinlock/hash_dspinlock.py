@@ -84,7 +84,11 @@ class HashDSpinlock(DSpinlockBase):
         if value is None:
             return unpacked_val
 
-        tokens = value.split(self._value_sep)
+        # handle case where we get byte strings
+        tokens = (
+            value.decode("utf-8").split(self._value_sep) if isinstance(value, bytes) else value.split(self._value_sep)
+        )
+
         tok_num = len(tokens)
 
         if tok_num == 3:

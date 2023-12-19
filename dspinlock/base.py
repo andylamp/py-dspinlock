@@ -166,7 +166,7 @@ class DSpinlockBase(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def _unpack_value(self, value: str | None) -> UnpackedValue | None:
+    def _unpack_value(self, value: bytes | str | None) -> UnpackedValue | None:
         """
         Unpacks the value from redis. The format of the stored value is the following,
 
@@ -176,7 +176,7 @@ class DSpinlockBase(ABC):
 
         Parameters
         ----------
-        value: str | None
+        value: bytes | str | None
             The value as fetched from redis.
 
         Returns
