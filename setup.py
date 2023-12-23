@@ -4,7 +4,7 @@ import os
 from setuptools import find_packages, setup
 
 # the version of the package for easier extraction
-VERSION: str = "0.2.9"
+VERSION: str = "0.2.10"
 
 # get the current path
 CURRENT_PATH = os.path.dirname(os.path.abspath(__file__))
@@ -31,7 +31,7 @@ if __name__ == "__main__":
         description="A distributed spinlock for Python",
         long_description=long_desc,
         long_description_content_type="text/markdown",
-        url="https://github.com/andylamp/py-dpspinlock/",
+        url="https://github.com/andylamp/py-dspinlock/",
         packages=find_packages(),
         install_requires=requirements,
         classifiers=[

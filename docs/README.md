@@ -27,7 +27,7 @@ To use the library, please install it as follows,
 
 ```bash
 # assuming you are in a virtual environment
-pip install py-dspilock
+pip install py-dspinlock
 ```
 
 Any requirements will be installed automatically, but the minimum required version of `redis` client is set to
@@ -145,7 +145,7 @@ baseclass itself. To so do, you can override these functions,
 
 - `_get_uid`: returns the unique identifier for the instance, by default it is the `hash` of the object,
 - `_get_tag`: the tag of the instance which is used to "tag" the actual mutex value,
-- _`unpack_value`: defines the way we unpack the value retrieved from `redis`,
+- `_unpack_value`: defines the way we unpack the value retrieved from `redis`,
 - `get_key`: returns the key that should be uniquely identifying each entry.
 
 You do not have to override all of them, but for more details you can see how the `HashDSpinlock` itself is
