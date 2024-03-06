@@ -51,12 +51,12 @@ jobs:
           sudo snap install shfmt
       # Redis section.
       - name: Create the redis instance
-        uses: supercharge/redis-github-action@1.7.0
+        uses: supercharge/redis-github-action@1.8.0
         with:
           redis-version: 6
       # Python linting phase.
       - name: Running pre-commit hooks...
-        uses: pre-commit/action@v3
+        uses: pre-commit/action@v3.0.1
       # Shell linting phase.
       - name: Running shell check...
         uses: ludeeus/action-shellcheck@master
