@@ -50,7 +50,7 @@ repos:
         args: [ -i 2 ]
   # ensure code is black compliant
   - repo: https://github.com/psf/black
-    rev: '23.12.1'
+    rev: '24.2.0'
     hooks:
       - id: black
   # statically populates the `known_third_party` config of `isort`
@@ -65,13 +65,13 @@ repos:
       - id: isort
   # add autoflakes
   - repo: https://github.com/myint/autoflake
-    rev: v2.2.1
+    rev: v2.3.0
     hooks:
       - id: autoflake
         args: [ '--in-place', '--remove-all-unused-imports', '--ignore-init-module-imports']
   # run flake8 and make sure it passes
   - repo: https://github.com/pycqa/flake8
-    rev: '6.1.0'
+    rev: '7.0.0'
     hooks:
       - id: flake8
   # add bandit

@@ -1,4 +1,5 @@
 """"Module that contains query related utilities."""
+
 import logging
 from abc import ABC, abstractmethod
 from collections.abc import Hashable

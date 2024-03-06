@@ -1,4 +1,5 @@
 """Module that contains useful utilities."""
+
 from dataclasses import dataclass
 from typing import Literal
 

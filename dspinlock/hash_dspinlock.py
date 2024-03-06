@@ -1,4 +1,5 @@
 """Module that implements the hashable distributed spinlock."""
+
 from collections.abc import Hashable
 from datetime import datetime, timezone
 from uuid import uuid4

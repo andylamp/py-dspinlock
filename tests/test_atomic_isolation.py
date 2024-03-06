@@ -1,4 +1,5 @@
 """Test the atomic isolated functionality."""
+
 import asyncio
 import logging
 from datetime import datetime, timezone

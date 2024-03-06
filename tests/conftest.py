@@ -1,4 +1,5 @@
 """The conf file which contains the fixtures used."""
+
 import asyncio
 import random
 import string

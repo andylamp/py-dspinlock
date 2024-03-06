@@ -1,10 +1,11 @@
 """The setup module."""
+
 import os
 
 from setuptools import find_packages, setup
 
 # the version of the package for easier extraction
-VERSION: str = "0.2.10"
+VERSION: str = "0.2.2"
 
 # get the current path
 CURRENT_PATH = os.path.dirname(os.path.abspath(__file__))

@@ -1,4 +1,5 @@
 """Module that tests mutex state deletion functionality."""
+
 from dspinlock import HashDSpinlock
 
 
