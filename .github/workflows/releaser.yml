@@ -35,7 +35,7 @@ jobs:
           echo "version_tag=${version_tag}" >> ${GITHUB_ENV}
       # Check if the release tag already exists
       - name: Check if the release tag already exists
-        uses: mukunku/tag-exists-action@v1.4.0
+        uses: mukunku/tag-exists-action@v1.6.0
         id: checkTag
         with:
           tag: ${{ env.version_tag }}
