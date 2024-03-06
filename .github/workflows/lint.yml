@@ -56,7 +56,7 @@ jobs:
           redis-version: 6
       # Python linting phase.
       - name: Running pre-commit hooks...
-        uses: pre-commit/action@v3.0.0
+        uses: pre-commit/action@v3
       # Shell linting phase.
       - name: Running shell check...
         uses: ludeeus/action-shellcheck@master
@@ -68,7 +68,7 @@ jobs:
       # Verify that the coverage file changed.
       - name: Verify Changed files
         if: ${{ matrix.python-version == env.min-python }}
-        uses: tj-actions/verify-changed-files@v12
+        uses: tj-actions/verify-changed-files@v19
         id: changed_files
         with:
           files: ${{ env.coverage-badge-filename }}
