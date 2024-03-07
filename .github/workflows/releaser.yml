@@ -49,7 +49,7 @@ jobs:
           fi
       # Set up the python environment for releasing
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "3.11"
       # Install the pypa/build package, which allows us to actually build the packages
