@@ -8,17 +8,22 @@
 ## Introduction
 
 This is a simple, yet flexible implementation of a distributed spinlock mutex. A mutex is a way to lock a resource
-under contention, for more information about mutexes you can read [here][3]. In particular, a [Spinlock][4] is a type
-of mutex that blocks the waiting thread and continuously polls the target mutex to see when it can be acquired. This
-can be useful when you have many stateless distributed services that are in contention for the same resource. For
-example, this can be reflected when you want to avoid duplicate computations while a query is already being executed.
+under contention; for more information about mutexes you can read [here][3]. In particular, a [Spinlock][4] is a type
+of mutex that blocks the waiting thread and periodically polls at fixed intervals the target mutex to see when it can
+be acquired. The differentiation with normal mutexes is that after some failed attempts, the acquisition is aborted and
+an exception is normally raised. This is in contrast to the normal mutex behaviour, which never aborts and can cause
+execution to block indefinitely. This can be useful when you have many stateless distributed services that are in
+contention for the same resource. For example, this can be reflected when you want to avoid duplicate computations
+while a query is already being executed.
 
-*Note: the documentation in `readthedocs` is always generated against the latest published version, thus there might
-be differences if you are using the checkout from `main` avenue to install.*
+The full documentation can be found over at [readthedocs][5].
+
+*Note: the documentation in [readthedocs][9] is always generated against the latest published version, thus there might
+be differences if you are checking out from `main` to install.*
 
 ## Preliminaries
 
-The implementation is based on `redis` and practically is the only required dependency to successfully install the
+The implementation is based on [`redis`][6] and practically is the only required dependency to successfully install the
 library. For more configuration options and usage directions, please read on.
 
 ## Installation
@@ -112,10 +117,10 @@ For more information, please check the source code at the [link][2].
 
 ### Extending the base class to fit your needs
 
-While a default Spinlock is supplied, it is very common that you might want to subclass it in order to customise
-its functionality. There are two avenues to do that, you can subclass `HashDSpinlock` directly, or you can
-subclass its base abstract class `DSpinlockBase`. Most of the functionality is contained in the base abstract class,
-hence you need to only implement the methods shown in `HashDSpinlock` and tweak any of the base class values such as,
+While a default Spinlock is supplied, you might want to subclass it to customise its functionality. There are couple
+ways to do that. Namely, you can subclass `HashDSpinlock` directly, or you can subclass its base abstract class
+`DSpinlockBase`. Most of the functionality is contained in the base abstract class, hence you need to only implement
+the methods shown in `HashDSpinlock` and tweak any of the base class values such as,
 
 - `max_spinlock_tries`: The spinlock max retries, by default 10 tries.
 - `spinlock_sleep_thresh`: The spinlock sleep threshold, by default 0.5 seconds.
@@ -152,13 +157,15 @@ You do not have to override all of them, but for more details you can see how th
 implemented.
 
 *Note: Python 3 does not support stable hashing for `str`, `bytes`, and `datetime`. In these instances, we use a stable
-hashing algorithm from `hashlib`, namely `sha256` based digests.*
+hashing algorithm from [hashlib][7], namely [sha256][8] based digests.*
 
 ### Enable logging
 
-The library uses a custom logger in order to provide diagnostic information. To enable the logger, to do two things.
-Firstly you need to set the environment variable - using any value - with the key: `SL_LOG_ENABLED`. After, you have
-to set your basic logger to accept at least `DEBUG` level messages, as all diagnostic ones are set to that level.
+The library uses a custom logger to provide diagnostic information. To enable this functionality you need to
+do the following,
+
+1. Set the environment variable - using any value - with the key: `SL_LOG_ENABLED`.
+1. Set your basic logger to accept at least `DEBUG` level messages, as all diagnostic ones are set to that level.
 
 The code snippet that accomplishes that is shown below,
 
@@ -181,3 +188,8 @@ if __name__ == "__main__":
 [2]: https://github.com/andylamp/py-dspinlock/blob/main/dspinlock/utils.py
 [3]: https://en.wikipedia.org/wiki/Lock_(computer_science)
 [4]: https://en.wikipedia.org/wiki/Spinlock
+[5]: https://py-dspinlock.readthedocs.io/en/latest/README.html#
+[6]: https://redis.com
+[7]: https://docs.python.org/3/library/hashlib.html
+[8]: https://docs.python.org/3/library/hashlib.html#hashlib.sha256
+[9]: https://about.readthedocs.com/

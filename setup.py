@@ -5,7 +5,7 @@ import os
 from setuptools import find_packages, setup
 
 # the version of the package for easier extraction
-VERSION: str = "0.3.0"
+VERSION: str = "0.3.1"
 
 # get the current path
 CURRENT_PATH = os.path.dirname(os.path.abspath(__file__))
@@ -36,10 +36,11 @@ if __name__ == "__main__":
         packages=find_packages(),
         install_requires=requirements,
         classifiers=[
-            "Development Status :: 4 - Beta",
+            "Development Status :: 5 - Production/Stable",
             "Programming Language :: Python :: 3.10",
             "Programming Language :: Python :: 3.11",
             "Programming Language :: Python :: 3.12",
+            "Programming Language :: Python :: 3.13",
             "License :: OSI Approved :: Apache Software License",
         ],
         license="Apache Software License 2.0",
